@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+# -*- mode: sh -*-
+
+#:  * `cache` [<options>]
+#:
+#:  Query the local package database
+#:
+#:      -u              Update the local package database
+#:      -s  <[/]pattern[/]>     Search for package(s) that own the file pattern
+#:      -d              Display any debugging information
+#:      -q              Make some output more quiet
+#:      -h, --help      Show this message
+
+usage() {
+    brew cache --help
+}
+
+if [ $# -eq 0 ]; then
+    usage
+    exit 1
+fi
+
+BASE_NAME=$(basename $0)
+CACHE_DIR=
+case $(uname -s) in
+    Linux)
+        CACHE_DIR=${XDG_CACHE_HOME-$HOME/.cache}/${BASE_NAME}
+        ;;
+    Darwin)
+        CACHE_DIR=$HOME/Library/Caches/${BASE_NAME}
+        ;;
+    *)
+        echo "Error: Unsupported platform"
+        exit 1
+esac
+mkdir -p ${CACHE_DIR}
+
+UPDATE=0
+SEARCH=
+DEBUG=0
+QUIET=0
+while getopts us:dqh OPT; do
+    case "$OPT" in
+        u)
+            UPDATE=1
+            ;;
+        s)
+            SEARCH="$OPTARG"
+            ;;
+        d)
+            DEBUG=1
+            ;;
+        q)
+            QUIET=1
+            ;;
+        h)
+            usage
+            ;;
+    esac
+done
+
+[[ ${DEBUG} -eq 1 ]] && echo "Update: ${UPDATE}"
+[[ ${DEBUG} -eq 1 ]] && echo "Search: ${SEARCH}"
+[[ ${DEBUG} -eq 1 ]] && echo "Debug : ${DEBUG}"
+[[ ${DEBUG} -eq 1 ]] && echo "Quiet : ${QUIET}"
+
+[[ ${DEBUG} -eq 1 ]] && echo "Cache dir: ${CACHE_DIR}"
+CACHE_CURRENT_FILE=${CACHE_DIR}/homebrew-current.cache
+
+latest-cache() {
+    brew --config | awk '/Core tap HEAD/ { print $4 }'
+}
+
+current-cache() {
+    [[ -f ${CACHE_CURRENT_FILE} ]] && cat ${CACHE_CURRENT_FILE}
+}
+
+cache-file() {
+    local cache_hash=${1?}
+    echo "${CACHE_DIR}/homebrew-${cache_hash}.cache"
+}
+
+cache-exists() {
+    if [[ -f ${CACHE_CURRENT_FILE} ]]; then
+        local cache_hash=$(current-cache)
+        [[ -f $(cache-file ${cache_hash}) ]]
+    else
+        return 1
+    fi
+}
+
+build-cache() {
+    local cache_hash=${1?}
+    [[ ${QUIET} -eq 0 ]] && echo "Building cache: ${cache_hash}"
+
+    TMP=$(mktemp -p ${CACHE_DIR})
+    [[ ${DEBUG} -eq 1 ]] && echo "Temp file: ${TMP}"
+
+    for formula in $(brew list --formula); do
+        for file in $(brew list --verbose ${formula}); do
+            echo "${file} ${formula}" >> ${TMP}
+        done
+    done
+
+    # Remove previous cache file
+    local prev_hash=$(current-cache)
+    rm -f $(cache-file ${prev_hash})
+
+    # Create cache file
+    mv -f ${TMP} $(cache-file ${cache_hash})
+
+    # Remove any tmp files left
+    rm -f ${CACHE_DIR}/tmp.*
+
+    # Create current cache file
+    echo "${cache_hash}" > ${CACHE_CURRENT_FILE}
+
+    [[ ${QUIET} -eq 0 ]] && echo "Cache: ${cache_hash} is built"
+}
+
+update-cache() {
+    if cache-exists; then
+        local current_hash=$(current-cache)
+        local latest_hash=$(latest-cache)
+        [[ ${QUIET} -eq 0 ]] && echo "Current cache: ${current_hash}"
+        if [[ ${current_hash} == ${latest_hash} ]]; then
+            [[ ${QUIET} -eq 0 ]] && echo "Cache: ${current_hash} is up-to-date"
+        else
+            [[ ${QUIET} -eq 0 ]] && echo "Latest cache: ${latest_hash} is available"
+            build-cache ${latest_hash}
+        fi
+    else
+        local latest_hash=$(latest-cache)
+        build-cache ${latest_hash}
+    fi
+}
+
+search-cache() {
+    local cache_hash=${1?}
+    [[ ${DEBUG} -eq 1 ]] && echo "Searching: ${SEARCH} in cache: ${cache_hash}"
+    local pattern=
+    if [[ ${SEARCH:0:1} == "/" ]] && [[ ${SEARCH:$((${#SEARCH}-1))} == "/" ]]; then
+        # Starts with '/' and ends with '/', i.e. regex pattern
+        pattern="${SEARCH}"
+    else
+        # Escape '/' to '\/' and '.' to '\.'
+        local escaped=$(echo ${SEARCH} | sed -e 's#/#\\/#g' -e 's#\.#\\.#g')
+        pattern="/.*${escaped}.*/"
+    fi
+    awk "\$1 ~ ${pattern} { if (prev != \$2) { prev = \$2; print \$2 } }" $(cache-file ${cache_hash})
+}
+
+if [[ ${UPDATE} -eq 1 ]]; then
+    update-cache
+fi
+
+if [[ ${SEARCH} != "" ]]; then
+    if cache-exists; then
+        search-cache $(current-cache)
+    else
+        echo "Error: No cache found. Run 'brew cache -u'"
+        exit 1
+    fi
+fi
