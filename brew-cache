@@ -3,13 +3,13 @@
 
 #:  * `cache` [<options>]
 #:
-#:  Query the local package database
+#:  Query the local Homebrew packages cache
 #:
-#:      -u              Update the local package database
+#:      -u                    Update/build the local packages cache
 #:      -s  <[/]pattern[/]>     Search for package(s) that own the file pattern
-#:      -d              Display any debugging information
-#:      -q              Make some output more quiet
-#:      -h, --help      Show this message
+#:      -d                    Display any debugging information
+#:      -q                    Make some output more quiet
+#:      -h, --help            Show this message
 
 usage() {
     brew cache --help
@@ -104,7 +104,7 @@ build-cache() {
 
     # Remove previous cache file
     local prev_hash=$(current-cache)
-    rm -f $(cache-file ${prev_hash})
+    [[ ! -z ${prev_hash} ]] && rm -f $(cache-file ${prev_hash})
 
     # Create cache file
     mv -f ${TMP} $(cache-file ${cache_hash})
