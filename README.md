@@ -64,7 +64,7 @@ gtk+3
 
 ## License
 
-The project is licensed under the 2-Clause BSD License.
+The project is licensed under the 2-Clause BSD License.<br>
 See [LICENSE](LICENSE) or
 https://spdx.org/licenses/BSD-2-Clause.html
 for full license information.
