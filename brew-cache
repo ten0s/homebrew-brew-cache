@@ -129,7 +129,7 @@ update-cache() {
         local latest_hash=$(latest-cache)
         [[ ${QUIET} -eq 0 ]] && echo "Current cache: ${current_hash}"
         if [[ ${current_hash} == ${latest_hash} ]]; then
-            [[ ${QUIET} -eq 0 ]] && echo "Cache: ${current_hash} is up-to-date"
+            [[ ${QUIET} -eq 0 ]] && echo "Cache: ${current_hash} is up to date"
         else
             [[ ${QUIET} -eq 0 ]] && echo "Latest cache: ${latest_hash} is available"
             build-cache ${latest_hash}
