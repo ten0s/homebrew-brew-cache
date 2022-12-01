@@ -101,9 +101,9 @@ build-cache() {
     TMP=$(mktemp -p ${CACHE_DIR})
     [[ ${DEBUG} -eq 1 ]] && echo "Temp file: ${TMP}"
 
-    for formula in $(brew list --formula); do
-        for file in $(brew list --verbose ${formula}); do
-            echo "${file} ${formula}" >> ${TMP}
+    brew list --formula --versions | while read -a pair; do
+        brew list --verbose ${pair[0]} | while read -a file; do
+            echo "${file} ${pair[0]} ${pair[1]}" >> ${TMP}
         done
     done
 
@@ -152,7 +152,7 @@ search-cache() {
         local escaped=$(echo ${SEARCH} | sed -e 's#/#\\/#g' -e 's#\.#\\.#g')
         pattern="/.*${escaped}.*/"
     fi
-    awk "\$1 ~ ${pattern} { if (prev != \$2) { prev = \$2; print \$2 } }" $(cache-file ${cache_hash})
+    awk "\$1 ~ ${pattern} { if (prev != \$2) { prev = \$2; print \$2, \$3 } }" $(cache-file ${cache_hash})
 }
 
 if [[ ${UPDATE} -eq 1 ]]; then
