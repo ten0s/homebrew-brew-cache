@@ -46,21 +46,11 @@ DEBUG=0
 QUIET=0
 while getopts us:dqh OPT; do
     case "$OPT" in
-        u)
-            UPDATE=1
-            ;;
-        s)
-            SEARCH="$OPTARG"
-            ;;
-        d)
-            DEBUG=1
-            ;;
-        q)
-            QUIET=1
-            ;;
-        h)
-            usage
-            ;;
+        u) UPDATE=1 ;;
+        s) SEARCH="$OPTARG" ;;
+        d) DEBUG=1 ;;
+        q) QUIET=1 ;;
+        h) usage ;;
     esac
 done
 
