@@ -51,15 +51,15 @@ Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is up to date
 
 ```
 % brew cache -s 'lib/libgtk-3.so'
-gtk+3
+gtk+3 3.24.35
 ```
 
 #### Pattern is a regular expression
 
 ```
 % brew cache -s '/lib\/gtk.*/'
-at-spi2-atk
-gtk+3
+at-spi2-atk 2.38.0
+gtk+3 3.24.35
 ```
 
 ## License
