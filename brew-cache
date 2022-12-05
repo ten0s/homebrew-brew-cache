@@ -25,14 +25,15 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-BASE_NAME="com.github.ten0s.$(basename $0)"
+BASE_NAME=$(basename $0)
+RDNS_NAME="com.github.ten0s.${BASE_NAME}"
 CACHE_DIR=
 case $(uname -s) in
     Linux)
-        CACHE_DIR=${XDG_CACHE_HOME-$HOME/.cache}/${BASE_NAME}
+        CACHE_DIR=${XDG_CACHE_HOME-$HOME/.cache}/${RDNS_NAME}
         ;;
     Darwin)
-        CACHE_DIR=$HOME/Library/Caches/${BASE_NAME}
+        CACHE_DIR=$HOME/Library/Caches/${RDNS_NAME}
         ;;
     *)
         echo "Error: Unsupported platform"
