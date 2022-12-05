@@ -7,18 +7,18 @@ Search for locally installed package(s) that own the file pattern, similar to
 * yum whatprovides PATTERN
 * pacman --query --owns PATTERN
 
-## Installation
+## Install
 
-1. Make **brew-cache** accessible from **PATH**
-2. Ensure **brew-cache** is runnable
-
+```
+% brew tap ten0s/brew-cache
+```
 
 ## Usage
 
 ### See help
 
 ```
-$ brew cache
+% brew cache
 Usage: brew cache [options]
 
 Query the local Homebrew packages cache
@@ -78,7 +78,7 @@ meson 0.64.1
 ```
 
 ```
-% brew cache -s 'lib/libgtk-3.so'
+$ brew cache -s 'lib/libgtk-3.so'
 gtk+3 3.24.35
 ```
 
@@ -94,7 +94,7 @@ gtk+3 3.24.35
 ##### Linux
 
 ```
-% brew cache -s '/lib\/gtk.*/'
+$ brew cache -s '/lib\/gtk.*/'
 at-spi2-atk 2.38.0
 gtk+3 3.24.35
 ```
