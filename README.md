@@ -42,7 +42,7 @@ Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is built
 ```
 % brew cache -u
 Current cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164
-Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is up to date
+Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is up-to-date
 ```
 
 ### Search for a locally installed package that owns the given file
