@@ -49,12 +49,49 @@ Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is up to date
 
 #### Pattern is a simple string
 
+##### MacOS
+
+```
+% brew cache -s 'gtk'
+cairo 1.16.0_5
+gettext 0.21.1
+gtk+3 3.24.35
+meson 0.64.1
+```
+
+```
+% brew cache -s 'lib/libgtk-3.dylib'
+gtk+3 3.24.35
+```
+
+##### Linux
+
+```
+$ brew cache -s 'gtk'
+at-spi2-atk 2.38.0
+cairo 1.16.0_5
+gettext 0.21.1
+gtk+3 3.24.35
+libxml2 2.10.3_1
+libxslt 1.1.37_1
+meson 0.64.1
+```
+
 ```
 % brew cache -s 'lib/libgtk-3.so'
 gtk+3 3.24.35
 ```
 
 #### Pattern is a regular expression
+
+##### MacOS
+
+```
+% brew cache -s '/lib\/gtk.*/'
+gtk+3 3.24.35
+```
+
+##### Linux
 
 ```
 % brew cache -s '/lib\/gtk.*/'
