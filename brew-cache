@@ -89,7 +89,7 @@ build-cache() {
     local cache_hash=${1?}
     [[ ${QUIET} -eq 0 ]] && echo "Building cache: ${cache_hash}"
 
-    TMP=$(mktemp -p ${CACHE_DIR})
+    TMP=$(mktemp -t ${BASE_NAME})
     [[ ${DEBUG} -eq 1 ]] && echo "Temp file: ${TMP}"
 
     brew list --formula --versions | while read -a pair; do
@@ -104,9 +104,6 @@ build-cache() {
 
     # Create cache file
     mv -f ${TMP} $(cache-file ${cache_hash})
-
-    # Remove any tmp files left
-    rm -f ${CACHE_DIR}/tmp.*
 
     # Create current cache file
     echo "${cache_hash}" > ${CACHE_CURRENT_FILE}
