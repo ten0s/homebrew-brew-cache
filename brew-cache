@@ -85,11 +85,24 @@ cache-exists() {
     fi
 }
 
+temp-file() {
+    case $(uname -s) in
+        Darwin)
+            mktemp -t ${BASE_NAME} ;;
+        Linux)
+            mktemp -t ${BASE_NAME}.XXXXXXXXXX ;;
+        *)
+            echo "Error: Unsupported platform"
+            exit 1
+            ;;
+        esac
+}
+
 build-cache() {
     local cache_hash=${1?}
     [[ ${QUIET} -eq 0 ]] && echo "Building cache: ${cache_hash}"
 
-    TMP=$(mktemp -t ${BASE_NAME})
+    TMP=$(temp-file)
     [[ ${DEBUG} -eq 1 ]] && echo "Temp file: ${TMP}"
 
     brew list --formula --versions | while read -a pair; do
