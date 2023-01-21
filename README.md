@@ -1,6 +1,6 @@
 [Homebrew External Command](https://docs.brew.sh/External-Commands)
 
-Search for locally installed package(s) that own the file pattern, similar to
+Search for locally installed packages that own the file pattern, similar to
 
 * dpkg --search PATTERN
 * apt-cache search PATTERN
@@ -24,7 +24,7 @@ Usage: brew cache [options]
 Query the local Homebrew packages cache
 
     -u                    Update/build the local packages cache
-    -s  [/]pattern[/]     Search for package(s) that own the file
+    -s  [/]pattern[/]     Search for packages that own the file
                                    pattern
     -d                    Display any debugging information
     -q                    Make some output more quiet
