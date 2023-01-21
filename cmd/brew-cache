@@ -11,7 +11,7 @@
 #:  Query the local Homebrew packages cache
 #:
 #:      -u                    Update/build the local packages cache
-#:      -s  <[/]pattern[/]>     Search for package(s) that own the file pattern
+#:      -s  <[/]pattern[/]>     Search for packages that own the file pattern
 #:      -d                    Display any debugging information
 #:      -q                    Make some output more quiet
 #:      -h, --help            Show this message
