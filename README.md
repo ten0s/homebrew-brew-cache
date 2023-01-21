@@ -45,7 +45,7 @@ Current cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164
 Cache: fcbb2f2ca6958fa9218c035e8cfef96cd6e92164 is up-to-date
 ```
 
-### Search for a locally installed package that owns the given file
+### Search for a locally installed packages that own the given file
 
 #### Pattern is a simple string
 
