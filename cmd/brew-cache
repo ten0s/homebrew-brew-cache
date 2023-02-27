@@ -106,7 +106,7 @@ build-cache() {
     [[ ${DEBUG} -eq 1 ]] && echo "Temp file: ${TMP}"
 
     brew list --formula --versions | while read -a pair; do
-        brew list --verbose ${pair[0]} | while read -a file; do
+        brew list --verbose ${pair[0]} | while read file; do
             echo "${file} ${pair[0]} ${pair[1]}" >> ${TMP}
         done
     done
