@@ -16,6 +16,10 @@
 #:      -q                    Make some output more quiet
 #:      -h, --help            Show this message
 
+version() {
+    git describe
+}
+
 usage() {
     brew cache --help
 }
@@ -45,13 +49,14 @@ UPDATE=0
 SEARCH=
 DEBUG=0
 QUIET=0
-while getopts us:dqh OPT; do
+while getopts us:dqvh OPT; do
     case "$OPT" in
         u) UPDATE=1 ;;
         s) SEARCH="$OPTARG" ;;
         d) DEBUG=1 ;;
         q) QUIET=1 ;;
-        h) usage ;;
+        v) version; exit 0 ;;
+        h) usage; exit 0 ;;
     esac
 done
 
