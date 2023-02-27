@@ -64,7 +64,15 @@ done
 CACHE_CURRENT_FILE=${CACHE_DIR}/homebrew-current.cache
 
 latest-cache() {
-    brew --config | awk '/Core tap HEAD/ { print $4 }'
+    # Build latest cache over all Taps
+    TMP=$(temp-file)
+    brew tap | while read tap; do
+        pushd $(brew --repo $tap) >& /dev/null
+        git rev-parse HEAD >> ${TMP}
+        popd >& /dev/null
+    done
+    sha1sum ${TMP} | awk '{ print $1 }'
+    rm -f ${TMP}
 }
 
 current-cache() {
