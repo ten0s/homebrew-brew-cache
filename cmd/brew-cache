@@ -17,7 +17,9 @@
 #:      -h, --help            Show this message
 
 version() {
+    pushd $(dirname $0) >& /dev/null
     git describe
+    popd &> /dev/null
 }
 
 usage() {
