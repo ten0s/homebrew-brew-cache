@@ -28,6 +28,7 @@ Query the local Homebrew packages cache
                                    pattern
     -d                    Display any debugging information
     -q                    Make some output more quiet
+    -v                    Show version
     -h, --help            Show this message
 ```
 
