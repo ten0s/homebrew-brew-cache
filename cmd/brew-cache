@@ -14,6 +14,7 @@
 #:      -s  <[/]pattern[/]>     Search for packages that own the file pattern
 #:      -d                    Display any debugging information
 #:      -q                    Make some output more quiet
+#:      -v                    Show version
 #:      -h, --help            Show this message
 
 version() {
